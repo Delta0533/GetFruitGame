@@ -55,6 +55,11 @@ private:
 	float enemySpawnTimerMax;
 	int maxEnemies;
 	bool mouseHeld;
+	float initialEnemySpeed;
+	float speedIncrement;
+	char facing;
+	bool canDash;
+	int timeDash;
 
 
 	//Game objects
