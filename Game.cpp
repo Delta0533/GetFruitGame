@@ -10,10 +10,13 @@ void Game::initVariables()
 	this->endGame = false;
 	this->points = 0;
 	this->health = 20;
-	this->enemySpawnTimerMax = 20.f;
+	this->enemySpawnTimerMax = 14.0f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
-	this->maxEnemies = 8;
+	this->maxEnemies = 10;
 	this->mouseHeld = false;
+	this->facing = 'a';
+	this->canDash = false;
+	this->timeDash = 0;
 
 }
 
@@ -23,7 +26,7 @@ void Game::initWindow()
 	this->VideoMode.height = 720;
 	this->VideoMode.width = 1280;
 
-	this->window = new sf::RenderWindow(this->VideoMode, "Holly Knight!", sf::Style::Close | sf::Style::Resize);
+	this->window = new sf::RenderWindow(this->VideoMode, "Oyasuminasai!", sf::Style::Close | sf::Style::Resize);
 
 	this->window->setFramerateLimit(60);
 }
@@ -54,14 +57,14 @@ void Game::initText()
 	this->uiText.setFont(this->font);
 	this->uiText.setCharacterSize(26);
 	this->uiText.setFillColor(sf::Color::White);
-	this->uiText.setPosition(10,0);
+	this->uiText.setPosition(10, 0);
 	this->uiText.setString("NONE");
 }
 
 
 void Game::initEnemies()
 {
-	this->enemy.setPosition(10.f,10.f);
+	this->enemy.setPosition(10.f, 10.f);
 
 }
 
@@ -241,8 +244,8 @@ void Game::updateEnemies()
 		else
 			this->enemySpawnTimer += 1.f;
 	}
-	float initialEnemySpeed = 3.0f; // Adjust value 
-	//float speedIncrement = 1.0f;    // Adjust value 
+	float initialEnemySpeed = 5.0f; // Adjust value 
+	float speedIncrement = 1.0f;    // Adjust value 
 
 	float enemySpeed = initialEnemySpeed;
 
@@ -251,20 +254,20 @@ void Game::updateEnemies()
 		bool deleted = false;
 
 		// Move enemies using the current enemySpeed
-		this->enemies[i].move(0.f, enemySpeed);
+		this->enemies[i].move(0.f, enemySpeed+=0.5);
 
 		if (this->enemies[i].getPosition().y > this->window->getSize().y)
 		{
 			this->enemies.erase(this->enemies.begin() + i);
-			this->health -= 1;
+			this->health -= 1;   //ปรับเสียเลือด
 			std::cout << "health: " << this->health << "\n";
 		}
 
 		// Check for collision with the player character
 		if (this->character.getGlobalBounds().intersects(this->enemies[i].getGlobalBounds()))
 		{
-			// Increase health by 1
-			this->health += 1;
+			// Increase health by 1  
+			this->health += 1;   
 
 			// Gain points based on the enemy type
 			if (this->enemies[i].getTexture() == &this->enemytexture1)
@@ -284,7 +287,7 @@ void Game::updateEnemies()
 		}
 
 		// Gradually increase enemySpeed
-		//enemySpeed *= speedIncrement;
+		enemySpeed *= speedIncrement;
 
 		// If a collision occurred, break the loop to avoid double counting
 		if (deleted)
@@ -293,50 +296,65 @@ void Game::updateEnemies()
 }
 
 
-
 void Game::updatePlayer()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	sf::Vector2f currentPosition = character.getPosition();
+	sf::Vector2f playerPosition = character.getPosition();
+
+	if (timeDash < 30) timeDash++;
+	else if (timeDash >= 30) canDash = true;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && character.getPosition().x > 0)
 	{
 		int xTexture = 0;
 		xTexture = (int)character.getPosition().x / 30 % 4; //ปรับตรงเลข 30 ได้ คือความsmooth ของ animation
 		xTexture = xTexture * 32;
 
 		character.setTextureRect(sf::IntRect(xTexture, 64, 32, 32)); //x,y,w,h
-		character.move(-5.f, 0.f);
+		character.move(-8.f, 0.f);
+		facing = 'a';
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && character.getPosition().x < window->getSize().x - 50)
 	{
 		int xTexture = 0;
 		xTexture = (int)character.getPosition().x / 30 % 4;
 		xTexture = xTexture * 32;
 
 		character.setTextureRect(sf::IntRect(xTexture, 96, 32, 32)); //x,y,w,h
-		character.move(5.f, 0.f);
+		character.move(8.f, 0.f);
+		facing = 'd';
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-	{
-		int xTexture = 0;
-		xTexture = (int)character.getPosition().y / 30 % 4; //อย่าลืมแก้ getPositionเปนแกน y
-		xTexture = xTexture * 32;
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+	//{
+	//	int xTexture = 0;
+	//	xTexture = (int)character.getPosition().y / 30 % 4; //อย่าลืมแก้ getPositionเปนแกน y
+	//	xTexture = xTexture * 32;
 
-		character.setTextureRect(sf::IntRect(xTexture, 0, 32, 32)); //x,y,w,h
-		character.move(0.f, -1.f);   //แก้ความเร็วในแกน y ด้วย
+	//	character.setTextureRect(sf::IntRect(xTexture, 0, 32, 32)); //x,y,w,h
+	//	character.move(0.f, -1.f);   //แก้ความเร็วในแกน y ด้วย
+	//}
+
+	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	//{
+	//	int xTexture = 0;
+	//	xTexture = (int)character.getPosition().y / 30 % 4;
+	//	xTexture = xTexture * 32;
+
+	//	character.setTextureRect(sf::IntRect(xTexture, 32, 32, 32)); //x,y,w,h
+	//	character.move(0.f, 1.f);
+	//}
+
+	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && canDash && character.getPosition().x - 150 > 0 && character.getPosition().x + 200 < window->getSize().x) {
+		switch (facing)
+		{
+		case 'a': character.setPosition(currentPosition + sf::Vector2f(-150, 0)); timeDash = 0; canDash = false; break;
+		case 'd': character.setPosition(currentPosition + sf::Vector2f(150, 0)); timeDash = 0; canDash = false; break;
+		default:
+			break;
+		}
 	}
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-	{
-		int xTexture = 0;
-		xTexture = (int)character.getPosition().y / 30 % 4;
-		xTexture = xTexture * 32;
-
-		character.setTextureRect(sf::IntRect(xTexture, 32, 32, 32)); //x,y,w,h
-		character.move(0.f, 1.f);
-	}
-
-	//this->handleInput();
 
 }
 
@@ -381,7 +399,7 @@ void Game::renderText(sf::RenderTarget& target)
 void Game::renderEnemies(sf::RenderTarget& target)
 {
 	//rendering all enemy
-	for (auto& e : this->enemies) 
+	for (auto& e : this->enemies)
 	{
 		target.draw(e);
 	}
