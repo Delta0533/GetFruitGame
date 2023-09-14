@@ -12,11 +12,6 @@
 #include<SFML/Network.hpp>
 
 
-/*
-	class that acts as the game engine.
-	wrapper class.
-*/
-
 class Game
 {
 private:
@@ -53,6 +48,9 @@ private:
 	int health;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
+	float skillSpawnTimer;
+	float skillSpwanTimerMax;
+	int maxSkill;
 	int maxEnemies;
 	bool mouseHeld;
 	float initialEnemySpeed;
@@ -70,12 +68,21 @@ private:
 	sf::Texture enemytexture3;
 	sf::Texture enemytexture4;
 	sf::Texture enemytexture5;
+	sf::Texture enenmybomber;
+
+	//Skill object
+	std::vector<sf::Sprite> Skills;
+	sf::Sprite skil;
+	sf::Texture skill1;
+	sf::Texture skill2;
+	sf::Texture skill3;
 
 	//Private Functions
 	void initVariables();
 	void initWindow();
 	void initBG();
 	void initEnemies();
+	void initSkill();
 	void initPlayer();
 	void initFonts();
 	void initText();
@@ -93,18 +100,22 @@ public:
 
 	//Functions
 	void spawnEnemy();
+	void spawnSkill();
 
 	void pollEvent();
 	void updateMousePostions();
 	void updateCollision();
+	void updateSkillCollision();
 	void updateText();
 	void updateEnemies();
+	void updateSkill();
 	void updatePlayer();
 	void update();
 
 	void renderBG(sf::RenderTarget& target);
 	void renderText(sf::RenderTarget& target);
 	void renderEnemies(sf::RenderTarget& target);
+	void renderSkill(sf::RenderTarget& target);
 	void renderPlayer(sf::RenderTarget& target);
 	void render();
 	
