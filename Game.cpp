@@ -9,10 +9,13 @@ void Game::initVariables()
 	//game logic
 	this->endGame = false;
 	this->points = 0;
-	this->health = 20;
+	this->health = 30;
 	this->enemySpawnTimerMax = 14.0f;
 	this->enemySpawnTimer = this->enemySpawnTimerMax;
 	this->maxEnemies = 10;
+	this->skillSpwanTimerMax = 200.0f;
+	this->skillSpawnTimer = this->skillSpwanTimerMax;
+	this->maxSkill = 10;
 	this->mouseHeld = false;
 	this->facing = 'a';
 	this->canDash = false;
@@ -62,6 +65,12 @@ void Game::initText()
 }
 
 
+void Game::initSkill()
+{
+	this->skil.setPosition(10.f, 10.f);
+}
+
+
 void Game::initEnemies()
 {
 	this->enemy.setPosition(10.f, 10.f);
@@ -74,8 +83,8 @@ void Game::initPlayer()
 	this->texture.loadFromFile("Textures/Orange_Head_Walking-Sheet.png");
 	this->character.setTexture(texture);  //ต้องเอารูปไปใส่ในกล่องก่อน
 	this->character.setTextureRect(sf::IntRect(0, 64, 32, 32)); //x,y,w,h เกี่ยวกับ animation
-	this->character.setPosition(sf::Vector2f(585, 650));  //ตำแหน่งจุดเกิดของ character 
-	this->character.setScale(sf::Vector2f(2, 2));   //ปรับขนาด sprite
+	this->character.setPosition(sf::Vector2f(585, 640));  //ตำแหน่งจุดเกิดของ character 
+	this->character.setScale(sf::Vector2f(2.35, 2.35));   //ปรับขนาด character
 }
 
 
@@ -89,6 +98,7 @@ Game::Game()
 	this->initText();
 	this->initEnemies();
 	this->initPlayer();
+	this->initSkill();
 
 }
 
@@ -111,6 +121,47 @@ const bool Game::getEndGame() const
 
 
 //Functions
+void Game::spawnSkill()
+{
+	this->skil.setPosition(
+		static_cast<float>(rand() % static_cast<int>(this->window->getSize().x - this->skil.getPosition().x)), 0.f);
+
+	//Randomize skill types
+	int type = rand() % 3;
+
+	switch (type)
+	{
+	case 0:
+		this->skill1.loadFromFile("Textures/Healitem.png"); 
+		this->skil.setTexture(skill1);
+		this->skil.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		this->skil.setScale(2.5, 2.5);
+		break;
+	case 1:
+		this->skill2.loadFromFile("Textures/buffitem.png");
+		this->skil.setTexture(skill2);
+		this->skil.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		this->skil.setScale(2.5, 2.5);
+		break;
+	/*case 2:
+		this->skill3.loadFromFile("Textures/Bigitem.png");
+		this->skil.setTexture(skill3);
+		this->skil.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		this->skil.setScale(2.5, 2.5);
+		break;*/
+	default:
+		this->skill1.loadFromFile("Textures/Healitem.png");
+		this->skil.setTexture(skill1);
+		this->skil.setTextureRect(sf::IntRect(0, 0, 32, 32));
+		this->skil.setScale(2.5, 2.5);
+		break;
+	}
+
+	//spawn the enemy
+	this->Skills.push_back(this->skil);
+}
+
+
 void Game::spawnEnemy()
 {
 	/*
@@ -122,13 +173,11 @@ void Game::spawnEnemy()
 	-add enemy to the vector
 	*/
 	this->enemy.setPosition(
-		static_cast<float>(rand() % static_cast<int>(this->window->getSize().x - this->enemy.getPosition().x)),
-		0.f
-		//static_cast<float>(rand() % static_cast<int>(this->window->getSize().y - this->enemy.getSize().y))
-	);
+		static_cast<float>(rand() % static_cast<int>(this->window->getSize().x - this->enemy.getPosition().x)), 0.f);
+		
 
 	//Randomize enemy types
-	int type = rand() % 5;
+	int type = rand() % 6;
 
 	switch (type)
 	{
@@ -136,37 +185,43 @@ void Game::spawnEnemy()
 		this->enemytexture1.loadFromFile("Textures/NewFruits.png"); //Banana
 		this->enemy.setTexture(enemytexture1);
 		this->enemy.setTextureRect(sf::IntRect(140, 0, 20, 20));
-		this->enemy.setScale(2.3, 2.3);
+		this->enemy.setScale(2.5, 2.5);
 		break;
 	case 1:
 		this->enemytexture2.loadFromFile("Textures/NewFruits.png");  //Cherry
 		this->enemy.setTexture(enemytexture2);
 		this->enemy.setTextureRect(sf::IntRect(280, 80, 20, 20));
-		this->enemy.setScale(2.3, 2.3);
+		this->enemy.setScale(2.5, 2.5);
 		break;
 	case 2:
 		this->enemytexture3.loadFromFile("Textures/NewFruits.png");   //Grape
 		this->enemy.setTexture(enemytexture3);
 		this->enemy.setTextureRect(sf::IntRect(60, 0, 20, 20));
-		this->enemy.setScale(2.3, 2.3);
+		this->enemy.setScale(2.5, 2.5);
 		break;
 	case 3:
 		this->enemytexture4.loadFromFile("Textures/NewFruits.png");   //Thor
 		this->enemy.setTexture(enemytexture4);
 		this->enemy.setTextureRect(sf::IntRect(240, 20, 20, 20));
-		this->enemy.setScale(2.3, 2.3);
+		this->enemy.setScale(2.5, 2.5);
 		break;
 	case 4:
 		this->enemytexture5.loadFromFile("Textures/NewFruits.png");  //Goldenapple
 		this->enemy.setTexture(enemytexture5);
 		this->enemy.setTextureRect(sf::IntRect(40, 0, 20, 20));
-		this->enemy.setScale(2.3, 2.3);
+		this->enemy.setScale(2.5, 2.5);
+		break;
+	case 5:
+		this->enenmybomber.loadFromFile("Textures/bomby.png");  //bomber
+		this->enemy.setTexture(enenmybomber);
+		this->enemy.setTextureRect(sf::IntRect(0, 0, 64, 64));
+		this->enemy.setScale(2.0, 2.0);
 		break;
 	default:
 		this->enemytexture1.loadFromFile("Textures/NewFruits.png");
 		this->enemy.setTexture(enemytexture1);
 		this->enemy.setTextureRect(sf::IntRect(140, 0, 20, 20));
-		this->enemy.setScale(2.3, 2.3);
+		this->enemy.setScale(2.5, 2.5);
 		break;
 	}
 
@@ -219,6 +274,25 @@ void Game::updateCollision()
 }
 
 
+void Game::updateSkillCollision()
+{
+	sf::FloatRect playerBounds = character.getGlobalBounds();
+
+	for (size_t i = 0; i < Skills.size(); i++)
+	{
+		sf::FloatRect skillBounds = Skills[i].getGlobalBounds();
+
+		if (playerBounds.intersects(skillBounds))
+		{
+			//health--; 
+			std::cout << "Collision detected! Health: " << health << std::endl;
+
+			Skills.erase(Skills.begin() + i);
+		}
+	}
+}
+
+
 void Game::updateText()
 {
 	std::stringstream ss;
@@ -227,6 +301,58 @@ void Game::updateText()
 		<< "Points: " << this->points << "\n";
 
 	this->uiText.setString(ss.str());
+}
+
+
+void Game::updateSkill()
+{
+	if (this->Skills.size() < this->maxSkill)
+	{
+		if (this->skillSpawnTimer >= this->skillSpwanTimerMax)
+		{
+			// Spawn the enemy and reset timer
+			this->spawnSkill();
+			this->skillSpawnTimer = 0.f;
+		}
+		else
+			this->skillSpawnTimer += 1.f;
+	}
+	float initialSkillSpeed = 3.0f; // Adjust value 
+
+	float skillSpeed = initialSkillSpeed;
+
+	// Move and update enemies
+	for (int i = 0; i < this->Skills.size(); i++) {
+		bool deleted = false;
+
+		// Move enemies using the current enemySpeed
+		this->Skills[i].move(0.f, skillSpeed += 0.5);
+
+		if (this->Skills[i].getPosition().y > this->window->getSize().y)
+		{
+			this->Skills.erase(this->Skills.begin() + i);
+		}
+
+		// Check for collision with the player character
+		if (this->character.getGlobalBounds().intersects(this->Skills[i].getGlobalBounds()))
+		{
+			// Gain points based on the enemy type
+			if (this->Skills[i].getTexture() == &this->skill1)   // heal 5
+				this->health += 5;
+			else if (this->Skills[i].getTexture() == &this->skill2)   //คิดไม่อกก
+				this->points += 0;
+			//else if (this->Skills[i].getTexture() == &this->skill3)   //ขยายร่าง 
+			//	this->points += 0;
+
+			// Delete the enemy
+			deleted = true;
+			this->Skills.erase(this->Skills.begin() + i);
+		}
+
+		// If a collision occurred, break the loop to avoid double counting
+		if (deleted)
+			break;
+	}
 }
 
 
@@ -266,7 +392,7 @@ void Game::updateEnemies()
 		// Check for collision with the player character
 		if (this->character.getGlobalBounds().intersects(this->enemies[i].getGlobalBounds()))
 		{
-			// Increase health by 1  
+			// if collision occur Increase health by 1  
 			this->health += 1;   
 
 			// Gain points based on the enemy type
@@ -280,6 +406,8 @@ void Game::updateEnemies()
 				this->points += 7;
 			else if (this->enemies[i].getTexture() == &this->enemytexture5)
 				this->points += 10;
+			else if (this->enemies[i].getTexture() == &this->enenmybomber)
+				this->health -= 2;
 
 			// Delete the enemy
 			deleted = true;
@@ -326,6 +454,15 @@ void Game::updatePlayer()
 		facing = 'd';
 	}
 
+	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && canDash && character.getPosition().x - 150 > 0 && character.getPosition().x + 200 < window->getSize().x) {
+		switch (facing)
+		{
+		case 'a': character.setPosition(currentPosition + sf::Vector2f(-150, 0)); timeDash = 0; canDash = false; break;
+		case 'd': character.setPosition(currentPosition + sf::Vector2f(150, 0)); timeDash = 0; canDash = false; break;
+		default:
+			break;
+		}
+	}
 	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	//{
 	//	int xTexture = 0;
@@ -345,17 +482,6 @@ void Game::updatePlayer()
 	//	character.setTextureRect(sf::IntRect(xTexture, 32, 32, 32)); //x,y,w,h
 	//	character.move(0.f, 1.f);
 	//}
-
-	if ((sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) && canDash && character.getPosition().x - 150 > 0 && character.getPosition().x + 200 < window->getSize().x) {
-		switch (facing)
-		{
-		case 'a': character.setPosition(currentPosition + sf::Vector2f(-150, 0)); timeDash = 0; canDash = false; break;
-		case 'd': character.setPosition(currentPosition + sf::Vector2f(150, 0)); timeDash = 0; canDash = false; break;
-		default:
-			break;
-		}
-	}
-
 }
 
 
@@ -371,9 +497,13 @@ void Game::update()
 
 		this->updateEnemies();
 
+		this->updateSkill();
+
 		this->updatePlayer();
 
 		this->updateCollision();
+
+		this->updateSkillCollision();
 
 	}
 
@@ -406,6 +536,14 @@ void Game::renderEnemies(sf::RenderTarget& target)
 }
 
 
+void Game::renderSkill(sf::RenderTarget& target)
+{
+	for (auto& r : this->Skills)
+	{
+		target.draw(r);
+	}
+}
+
 void Game::renderPlayer(sf::RenderTarget& target)
 {
 	target.draw(this->character);
@@ -421,9 +559,13 @@ void Game::render()
 
 	this->renderEnemies(*this->window);
 
+	this->renderSkill(*this->window);
+
 	this->renderText(*this->window);
 
 	this->renderPlayer(*this->window);
 
 	this->window->display();
 }
+
+
