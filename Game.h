@@ -24,8 +24,9 @@ private:
 	//Mouse positions
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
+	bool mouseHeld;
 
-	//Resources
+	//Fonts
 	sf::Font font;
 
 	//Text
@@ -38,31 +39,41 @@ private:
 	//TextureBackground
 	sf::Texture BG1;
 	sf::Sprite BackGround1;
-
 	sf::Texture BG2;
 	sf::Sprite BackGround2;
 
 	//Game logic
 	bool endGame;
+
+	//Point system
 	unsigned points;
 	int buffpoint;
+
+	//player HP
 	int health;
-	int speedPlayer;
+
+	//fruit spawn
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
+	int maxEnemies;
+
+	//skill spawn
 	float skillSpawnTimer;
 	float skillSpwanTimerMax;
 	int maxSkill;
-	int maxEnemies;
-	bool mouseHeld;
+
+	//player speed
+	int speedPlayer;
 	float initialEnemySpeed;
 	float speedIncrement;
+
+	//dash function
 	char facing;
 	bool canDash;
 	int timeDash;
 
 
-	//Game objects
+	//fruits objects
 	std::vector<sf::Sprite> enemies;
 	sf::Sprite enemy;
 	sf::Texture enemytexture1;
@@ -70,6 +81,7 @@ private:
 	sf::Texture enemytexture3;
 	sf::Texture enemytexture4;
 	sf::Texture enemytexture5;
+	//bomb
 	sf::Texture enenmybomber;
 
 	//Skill object
@@ -85,21 +97,27 @@ private:
 
 	int position_y_item;
 	int position_x_item;
+
+	//skill function
 	int random_skill; 
 	int random_buff;
-	int currentframe_skill1 = 0;
-	int currentframe_skill2 = 0;
-	int currentframe_skill3 = 0;
-	bool skilldrop;
 	bool start_skill;
+	bool skilldrop;
+	bool buffPlayerSpeed;
+	bool debuffPlayerSpeed;
+	bool buffPointX2;
+
+	//clock skill varaibles
 	sf::Clock CD_skill_drop; 
 	sf::Clock CD_texture_skill;
 	sf::Clock CD_buffPlayerspeed;
 	sf::Clock CD_debuffPlayerspeed;
 	sf::Clock CD_buffPointX2;
-	bool buffPlayerSpeed;
-	bool debuffPlayerSpeed;
-	bool buffPointX2;
+
+	//Animation skill
+	int currentframe_skill1 = 0;
+	int currentframe_skill2 = 0;
+	int currentframe_skill3 = 0;
 
 	//Private Functions
 	void initVariables();
