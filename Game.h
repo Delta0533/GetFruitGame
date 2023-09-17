@@ -45,7 +45,9 @@ private:
 	//Game logic
 	bool endGame;
 	unsigned points;
+	int buffpoint;
 	int health;
+	int speedPlayer;
 	float enemySpawnTimer;
 	float enemySpawnTimerMax;
 	float skillSpawnTimer;
@@ -73,9 +75,31 @@ private:
 	//Skill object
 	std::vector<sf::Sprite> Skills;
 	sf::Sprite skil;
+
+	sf::Sprite skill1_sp;
+	sf::Sprite skill2_sp;
+	sf::Sprite skill3_sp;
 	sf::Texture skill1;
 	sf::Texture skill2;
 	sf::Texture skill3;
+
+	int position_y_item;
+	int position_x_item;
+	int random_skill; 
+	int random_buff;
+	int currentframe_skill1 = 0;
+	int currentframe_skill2 = 0;
+	int currentframe_skill3 = 0;
+	bool skilldrop;
+	bool start_skill;
+	sf::Clock CD_skill_drop; 
+	sf::Clock CD_texture_skill;
+	sf::Clock CD_buffPlayerspeed;
+	sf::Clock CD_debuffPlayerspeed;
+	sf::Clock CD_buffPointX2;
+	bool buffPlayerSpeed;
+	bool debuffPlayerSpeed;
+	bool buffPointX2;
 
 	//Private Functions
 	void initVariables();
@@ -96,11 +120,11 @@ public:
 	//Accessors
 	const bool running() const;
 	const bool getEndGame() const;
-	
+
 
 	//Functions
 	void spawnEnemy();
-	void spawnSkill();
+	//void spawnSkill();
 
 	void pollEvent();
 	void updateMousePostions();
@@ -118,6 +142,5 @@ public:
 	void renderSkill(sf::RenderTarget& target);
 	void renderPlayer(sf::RenderTarget& target);
 	void render();
-	
-};
 
+};
