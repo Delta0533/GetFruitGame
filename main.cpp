@@ -1,24 +1,20 @@
 #include"Game.h"
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
-using namespace sf;
-using namespace std;
 
 int main()
 {
-    //Init srand
-    std::srand(static_cast<unsigned>(time(NULL)));
+    srand(time(NULL));
 
-    //Init Game engine
-    Game game;
+    // --- Init Window ---
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 4;
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Fruits Slayer", sf::Style::Fullscreen);
+    window.setFramerateLimit(60);
+    // --- Init Window ---
 
-    while (game.running() && !Keyboard::isKeyPressed(Keyboard::Escape) && !game.getEndGame())
-    {
-        //update 
-        game.update();
-        //render
-        game.render();
-
-    }
+    Game game(window);
 
     return 0;
 }
