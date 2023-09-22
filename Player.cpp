@@ -9,7 +9,7 @@ void Player::Init() {
 
 	// Init Player Status
 	speed = 8;
-	HP = 50;
+	HP = 30;
 	score = 0;
 	playerFacing = 'a';
 }
