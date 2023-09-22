@@ -10,7 +10,7 @@ int main()
     // --- Init Window ---
     sf::ContextSettings settings;
     settings.antialiasingLevel = 4;
-    sf::RenderWindow window(sf::VideoMode(1280, 720), "Fruits Slayer", sf::Style::Fullscreen);
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "Fruits Slayer", sf::Style::Resize);
     window.setFramerateLimit(60);
     // --- Init Window ---
 
