@@ -1,9 +1,10 @@
 #include "Enemy.h"
 
-void Enemy::Init(int enemyType)
+void Enemy::Init(int enemyType, int speed)
 {
-	speedY = 6;
+	speedY = speed;
 	speedX = 1;
+	randBomb = rand() % 2;
 
 	switch (enemyType) {
 	case 0: {
@@ -48,28 +49,25 @@ void Enemy::Init(int enemyType)
 	}
 	case 4: {
 		// Golden Apple
-		appleTexture.loadFromFile("Textures/NewFruits.png");
-		appleSprite.setTexture(appleTexture);
-		appleSprite.setTextureRect(sf::IntRect(40, 0, 20, 20));
-		appleSprite.setScale(2.5, 2.5);
+		enemyTexture.loadFromFile("Textures/NewFruits.png");
+		enemySprite.setTexture(enemyTexture);
+		enemySprite.setTextureRect(sf::IntRect(40, 0, 20, 20));
+		enemySprite.setScale(2.5, 2.5);
 		points = 10;
 		type = 4;
 		break;
 	}
 	case 5: {
 		// Bomb
-		bombTexture.loadFromFile("Textures/bomby.png");
-		bombSprite.setTexture(bombTexture);
-		bombSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-		bombSprite.setScale(2,2);
+		enemyTexture.loadFromFile("Textures/bomby.png");
+		enemySprite.setTexture(enemyTexture);
+		enemySprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+		enemySprite.setScale(2,2);
 		type = 5;
+
 		break;
 	}
 	default:
-		//enemyTexture.loadFromFile("Textures/NewFruits.png"); //banana
-		//enemySprite.setTexture(enemyTexture);
-		//enemySprite.setTextureRect(sf::IntRect(140, 0, 20, 20));
-		//enemySprite.setScale(2.5, 2.5);
 		break;
 	}
 
@@ -77,7 +75,6 @@ void Enemy::Init(int enemyType)
 	int y = rand() % 500;
 
 	enemySprite.setPosition(x, 0 - y);
-	bombSprite.setPosition(x, 0 - y);
 	multiplier = 1.f;
 	status = true;
 }
@@ -85,18 +82,28 @@ void Enemy::Init(int enemyType)
 void Enemy::Update(sf::Sprite playerSprite, int& playerScore, int& playerHP)
 {
 	// Move Down until hit ground
-	if (enemySprite.getPosition().y < 720 || bombSprite.getPosition().y < 720) {
-		enemySprite.move(0, speedY);
-		bombSprite.move(0, speedY);
-		bombSprite.move(speedX, 0);
+	if (enemySprite.getPosition().y < 720) {
+		if (type == 5) {
+			if (randBomb == 0) {
+				enemySprite.move(0, speedY);
+				enemySprite.move(speedX, 0);
+
+			}
+				if (randBomb == 1) {
+				enemySprite.move(-speedX, 0);
+				enemySprite.move(0, speedY);
+
+			}
+		}
+		else enemySprite.move(0, speedY);
 	}
-	else if (enemySprite.getPosition().y >= 720 || bombSprite.getPosition().y >= 720) {
+	else if (enemySprite.getPosition().y >= 720) {
 		playerHP--;
-		//std::cout << "HP = " << playerHP << " Score = " << playerScore << std::endl;
+		std::cout << "HP = " << playerHP << " Score : " << playerScore << std::endl;
 		status = false;
 	}
 
-	if (playerSprite.getGlobalBounds().intersects(enemySprite.getGlobalBounds()) || playerSprite.getGlobalBounds().intersects(bombSprite.getGlobalBounds())) {
+	if (playerSprite.getGlobalBounds().intersects(enemySprite.getGlobalBounds()) || playerSprite.getGlobalBounds().intersects(bombSprite.getGlobalBounds()) ) {
 		if (type != 5) {
 			playerScore += points * multiplier;
 			playerHP++;
@@ -110,5 +117,4 @@ void Enemy::Update(sf::Sprite playerSprite, int& playerScore, int& playerHP)
 void Enemy::Draw(sf::RenderWindow& window)
 {
 	if (status) window.draw(enemySprite);
-	if (status) window.draw(bombSprite);
 }
