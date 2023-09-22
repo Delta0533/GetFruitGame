@@ -8,6 +8,7 @@
 #include "buff.h"
 
 #define maxEnemy 15
+#define maxbomb 5
 
 class Game {
 public:
@@ -36,15 +37,20 @@ public:
 
 	// Enemy
 	Enemy enemy[maxEnemy];
-
+	Enemy bomb[maxbomb];
 	// Buff
 	buff buff;
 
 	// GUI
 	gui gui;
 
+	//Wave
+	bool isWaveBuff[5];
+
 	// Test
 	sf::SoundBuffer fruitCollectSoundBuffer;
 	sf::Sound fruitCollectSFX;
+
+	int enemySpd;
 	
 };
