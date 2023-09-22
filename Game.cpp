@@ -1,6 +1,11 @@
 #include "Game.h"
 
 Game::Game(sf::RenderWindow &window) {
+
+	//Wave
+	for (int i = 0; i < 5; i++) {
+		isWaveBuff[i] = false;
+	}
 	// Load Backgroud
 	bg1Texture.loadFromFile("Textures/parallax-forest-back-trees.png");
 	bg1Sprite.setTexture(bg1Texture);
@@ -15,7 +20,7 @@ Game::Game(sf::RenderWindow &window) {
 	//Load Music
 	music.openFromFile("Themesong/rebornsong.mp3");
 	music.setLoop(true);
-	music.setVolume(25);
+	music.setVolume(10);
 	music.play();
 
 	// Init Player
@@ -31,13 +36,13 @@ Game::Game(sf::RenderWindow &window) {
 	// Init Enemy
 	for (int i = 0; i < maxEnemy; i++) {
 		int type = rand() % 6;
-		enemy[i].Init(type);
+		enemy[i].Init(type, 5);
 	}
 
 	// Init Sound
 	fruitCollectSoundBuffer.loadFromFile("Themesong/fruitCollect.mp3");
 	fruitCollectSFX.setBuffer(fruitCollectSoundBuffer);
-	fruitCollectSFX.setVolume(20);
+	fruitCollectSFX.setVolume(15);
 
 	isGameOver = false;
 	Loop(window);
@@ -70,8 +75,48 @@ void Game::Update(sf::Event& event, sf::RenderWindow& window)
 		}
 		else {
 			int type = rand() % 6;
-			enemy[i].Init(type);
+			enemy[i].Init(type, enemySpd);
 		}
+	}
+	//wave 0
+	if (player.score < 50) {
+		enemySpd = 5;
+		player.speed = 8;
+	}
+	//wave 1 
+	else if (player.score >= 50 && player.score < 100 && isWaveBuff[0] == false) {
+		player.HP += 15;
+		enemySpd = 7;
+		player.speed = 9;
+		isWaveBuff[0] = true;
+	}
+	//wave 2 
+	 else if (player.score >= 100 && player.score < 200 && isWaveBuff[0] == false) {
+		player.HP += 20;
+		enemySpd = 9;
+		player.speed = 10;
+		isWaveBuff[0] = true;
+	}
+	//wave 3 
+	else if (player.score >= 200 && player.score < 300 && isWaveBuff[0] == false) {
+		player.HP += 25;
+		enemySpd = 10;
+		player.speed = 11;
+		isWaveBuff[0] = true;
+	}
+	//wave 4
+	else if (player.score >= 300 && player.score < 400 && isWaveBuff[0] == false) {
+		player.HP += 35;
+		enemySpd = 12;
+		player.speed = 12;
+		isWaveBuff[0] = true;
+	}
+	//wave 4
+	else if (player.score >= 400 && player.score < 500 && isWaveBuff[0] == false) {
+		player.HP += 55;
+		enemySpd = 15;
+		player.speed = 13;
+		isWaveBuff[0] = true;
 	}
 
 	if (buff.status) {
