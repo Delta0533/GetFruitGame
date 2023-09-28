@@ -1,4 +1,5 @@
 #include"Game.h"
+#include "mainMenu.h"
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -14,7 +15,7 @@ int main()
     window.setFramerateLimit(60);
     // --- Init Window ---
 
-    Game game(window);
+    mainMenu menu(window);
 
     return 0;
 }
