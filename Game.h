@@ -6,6 +6,8 @@
 #include "Enemy.h"
 #include "gui.h"
 #include "buff.h"
+#include "mainMenu.h"
+#include "Gameover.h"
 
 #define maxEnemy 15
 #define maxbomb 5
