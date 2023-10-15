@@ -31,8 +31,6 @@ public:
 	sf::Texture bg2Texture;
 	sf::Sprite bg2Sprite;
 
-	//Themesong
-	sf::Music music;
 
 	// Player
 	Player player;
@@ -40,6 +38,8 @@ public:
 	// Enemy
 	Enemy enemy[maxEnemy];
 	Enemy bomb[maxbomb];
+	int enemySpd;
+
 	// Buff
 	buff buff;
 
@@ -49,10 +49,12 @@ public:
 	//Wave
 	bool isWaveBuff[5];
 
-	// Test
+	//Themesong
+	sf::Music music;
+
+	// Sound
 	sf::SoundBuffer fruitCollectSoundBuffer;
 	sf::Sound fruitCollectSFX;
 
-	int enemySpd;
 	
 };
