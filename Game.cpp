@@ -18,12 +18,6 @@ Game::Game(sf::RenderWindow &window) {
 	bg2Sprite.setTextureRect(sf::IntRect(0, 0, 272, 160));
 	bg2Sprite.setScale(5.f, 4.5f);
 
-	//Load Music
-	music.openFromFile("Themesong/rebornsong.mp3");
-	music.setLoop(true);
-	music.setVolume(10);
-	music.play();
-
 	// Init Player
 	player.Init();
 
@@ -40,10 +34,16 @@ Game::Game(sf::RenderWindow &window) {
 		enemy[i].Init(type, 5);
 	}
 
+	//Load Music
+	music.openFromFile("Themesong/wanderrer.mp3");
+	music.setLoop(true);
+	music.setVolume(10);
+	music.play();
+
 	// Init Sound
 	fruitCollectSoundBuffer.loadFromFile("Themesong/fruitCollect.mp3");
 	fruitCollectSFX.setBuffer(fruitCollectSoundBuffer);
-	fruitCollectSFX.setVolume(15);
+	fruitCollectSFX.setVolume(12);
 
 	isGameOver = false;
 	Loop(window);
@@ -122,7 +122,7 @@ void Game::Update(sf::Event& event, sf::RenderWindow& window)
 		player.HP += 55;
 		player.wave = 5;
 		enemySpd = 15;
-		player.speed = 15;
+		player.speed = 16;
 		isWaveBuff[4] = true;
 	}
 
@@ -167,5 +167,5 @@ void Game::Loop(sf::RenderWindow &window)
 		window.display();
 	}
 	//window.close();
-	Gameover gameover(window);
+	Gameover gameover(window, player.score);
 }
