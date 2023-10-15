@@ -6,29 +6,30 @@ mainMenu::mainMenu(sf::RenderWindow& window)
 	//Background
 	bgTexture.loadFromFile("Textures/fruitslayer.png");
 	bg.setTexture(bgTexture);
-	bg.setScale(0.65,0.67);
+	bg.setScale(0.65, 0.67);
 
+	here = 1;
 	//Play text
 	font.loadFromFile("Fonts/Wonderland.otf");
 	menuplay.setFont(font);
-	menuplay.setFillColor(sf::Color::White);
-	menuplay.setPosition(923,330);
+	menuplay.setFillColor(sf::Color::Red);
+	menuplay.setPosition(923, 330);
 	menuplay.setCharacterSize(48);
-	menuplay.setString("play");
+	menuplay.setString("play"); //here =  1
 
 	//scoreboard
 	menuscore.setFont(font);
 	menuscore.setFillColor(sf::Color::White);
 	menuscore.setPosition(840, 430);
 	menuscore.setCharacterSize(48);
-	menuscore.setString("scoreboard");
+	menuscore.setString("scoreboard"); //here = 2
 
 	//Exit text
 	menunexit.setFont(font);
 	menunexit.setFillColor(sf::Color::White);
-	menunexit.setPosition(923,530);
+	menunexit.setPosition(923, 530);
 	menunexit.setCharacterSize(48);
-	menunexit.setString("exit");
+	menunexit.setString("exit"); // here = 3
 
 	//---------- Loop ----------
 	Loop(window);
@@ -45,9 +46,32 @@ void mainMenu::Update(sf::Event& event, sf::RenderWindow& window)
 			if (event.key.code == sf::Keyboard::Escape) {
 				window.close();
 			}
-			if (event.key.code == sf::Keyboard::Return) {
-				Game game(window);
+			if (event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::Space) {
+				if (here == 1)Game game(window);//play
+				else if (here == 2)Highscore highscore(window);  //score board 
+				else if (here == 3) window.close();;//exit
 			}
+			if (event.key.code == sf::Keyboard::Up && here != 1 || event.key.code == sf::Keyboard::W && here != 1) {
+				here--;
+			}
+			if (event.key.code == sf::Keyboard::Down && here != 3 || event.key.code == sf::Keyboard::S && here != 3) {
+				here++;
+			}
+		}
+		if (here == 1) { // play on 
+			menuplay.setFillColor(sf::Color::Red);
+			menuscore.setFillColor(sf::Color::White);
+			menunexit.setFillColor(sf::Color::White);
+		}
+		if (here == 2) {//  score on
+			menuplay.setFillColor(sf::Color::White);
+			menuscore.setFillColor(sf::Color::Red);
+			menunexit.setFillColor(sf::Color::White);
+		}
+		if (here == 3) {// exit on
+			menuplay.setFillColor(sf::Color::White);
+			menuscore.setFillColor(sf::Color::White);
+			menunexit.setFillColor(sf::Color::Red);
 		}
 	}
 }
