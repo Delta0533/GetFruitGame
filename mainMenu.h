@@ -1,6 +1,7 @@
 #pragma once
 
 #include "game.h"
+#include "Highscore.h"
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -8,8 +9,8 @@
 class mainMenu
 {
 public:
-	mainMenu(sf::RenderWindow &window);
-	void Update(sf::Event &event, sf::RenderWindow &window);
+	mainMenu(sf::RenderWindow& window);
+	void Update(sf::Event& event, sf::RenderWindow& window);
 	void Draw(sf::RenderWindow& window);
 	void Loop(sf::RenderWindow& window);
 
@@ -20,5 +21,5 @@ public:
 	sf::Text menuplay;
 	sf::Text menunexit;
 	sf::Text menuscore;
+	int here; 
 };
-
