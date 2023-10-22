@@ -21,5 +21,8 @@ public:
 	sf::Text menuplay;
 	sf::Text menunexit;
 	sf::Text menuscore;
+
+	sf::Text nametext;
+
 	int here; 
 };
