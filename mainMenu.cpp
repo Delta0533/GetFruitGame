@@ -31,6 +31,13 @@ mainMenu::mainMenu(sf::RenderWindow& window)
 	menunexit.setCharacterSize(48);
 	menunexit.setString("exit"); // here = 3
 
+	//Myname text
+	nametext.setFont(font);
+	nametext.setFillColor(sf::Color::White);
+	nametext.setPosition(0,680);
+	nametext.setCharacterSize(24);
+	nametext.setString("66010533 Prompipat Thongtub");
+	
 	//---------- Loop ----------
 	Loop(window);
 }
@@ -82,6 +89,7 @@ void mainMenu::Draw(sf::RenderWindow& window)
 	window.draw(menuplay);
 	window.draw(menunexit);
 	window.draw(menuscore);
+	window.draw(nametext);
 }
 
 void mainMenu::Loop(sf::RenderWindow& window)
